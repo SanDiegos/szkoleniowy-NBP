@@ -12,15 +12,16 @@ import connection.HTTPConnection;
 import connection.validator.HTTPConnectionValidators;
 import entity.currency.Currency;
 import entity.tableType.Example;
+import service.CurrencyService;
 import util.Constants;
 import util.Constants.ActualExchangeRateTableTypes;
 import util.Constants.CurrencyCode;
 import util.Constants.ExchangeRatesTableTypes;
-import util.Constants.httpResponseType;
 
-public class ExchangeController {
+public class CurrencyController {
 
-
+	private final CurrencyService currencyService = new CurrencyService(null, null);
+	
 	public Currency getExchangeRateForDate(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode,
 			/* @Valid @PastOrPresent */ LocalDate date) {
 		ControllerArgumentsValidator.checkIfDateIsPastOrPresent(date);
@@ -72,16 +73,16 @@ public class ExchangeController {
 		return Calculations.exchange(amount, curr.getRate());
 	}
 
-	public BigDecimal exchange(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode, BigDecimal amount,
-			httpResponseType responseType) {
-		HTTPConnection connection = new HTTPConnection(new ExchangeRateURLEnhancer(tableType, currencyCode),
-				t -> HTTPConnectionValidators.validateConnection(t));
-		connection.validateConnection();
-		Currency curr = connection.getMapped(Currency.class);
-		if (Objects.isNull(curr) || Objects.isNull(curr.getRate())) {
-			throw new RuntimeException("Didn't found current course currency.");
-		}
-		return Calculations.exchange(amount, curr.getRate());
-	}
+//	public BigDecimal exchange(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode, BigDecimal amount,
+//			httpResponseType responseType) {
+//		HTTPConnection connection = new HTTPConnection(new ExchangeRateURLEnhancer(tableType, currencyCode),
+//				t -> HTTPConnectionValidators.validateConnection(t));
+//		connection.validateConnection();
+//		Currency curr = connection.getMapped(Currency.class);
+//		if (Objects.isNull(curr) || Objects.isNull(curr.getRate())) {
+//			throw new RuntimeException("Didn't found current course currency.");
+//		}
+//		return Calculations.exchange(amount, curr.getRate());
+//	}
 
 }

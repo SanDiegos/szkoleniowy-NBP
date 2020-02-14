@@ -26,7 +26,7 @@ import util.JsonUtil;
 
 public class ExchangeControllerTest {
 
-	private final ExchangeController controller = new ExchangeController();
+	private final CurrencyController controller = new CurrencyController();
 	private final LocalDate dateOfcurrency = LocalDate.of(2020, 02, 9);
 
 	private final String jsonExample = "{\"table\":\"C\",\"currency\":\"OJRO_Z_PLIKU\",\"code\":\"EUR\",\"rates\":[{\"no\":\"029/C/NBP/2020\",\"effectiveDate\":\"2020-02-12\",\"bid\":4.2081,\"ask\":4.2931}]}";
