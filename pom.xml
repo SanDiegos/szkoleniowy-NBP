@@ -36,11 +36,15 @@
 		    <version>4.13</version>
 		    <scope>test</scope>
 		</dependency>
-		<dependency>
+		
+		<!-- XML parser -->
+		<!-- <dependency>
 		    <groupId>net.sf.dozer</groupId>
 		    <artifactId>dozer</artifactId>
 		    <version>5.5.1</version>
-		</dependency>
+		</dependency> -->
+		
+		<!-- walidacja springowa -->
 		<!-- <dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>

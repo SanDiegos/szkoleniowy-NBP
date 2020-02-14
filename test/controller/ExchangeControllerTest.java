@@ -57,10 +57,7 @@ public class ExchangeControllerTest {
 		Assert.assertNotNull(exchangeRates.getRates());
 		Assert.assertNotEquals(exchangeRates.getRates(), Collections.EMPTY_LIST);
 		List<String> collect = Stream.of(ExchangeRatesTableTypes.values()).map(d -> d.toString()).collect(Collectors.toList());
-		Assert.assertTrue(
-				Arrays.asList(
-						collect)
-						.contains(exchangeRates.getTable()));
+		Assert.assertTrue(collect.contains(exchangeRates.getTable()));
 	}
 
 	@Test

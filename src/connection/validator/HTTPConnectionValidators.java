@@ -11,7 +11,7 @@ public class HTTPConnectionValidators<T> {
 
 	public static boolean validateConnectionWithoutThrow(HttpURLConnection connection) {
 		Optional<Integer> responseCode = checkResponse(connection, HttpURLConnection::getResponseCode);
-		if (HttpURLConnection.HTTP_OK != responseCode.get()) {
+		if (responseCode.get() != HttpURLConnection.HTTP_OK) {
 			System.err.println(String.format("Didn't find data in URL: [%s].", connection.getURL().getPath()));
 			return false;
 		}
@@ -21,7 +21,7 @@ public class HTTPConnectionValidators<T> {
 	public static boolean validateConnection(HttpURLConnection connection) {
 		Optional<Integer> responseCode = checkResponse(connection, HttpURLConnection::getResponseCode);
 		Optional<String> responseMessage = checkResponse(connection, HttpURLConnection::getResponseMessage);
-		if (HttpURLConnection.HTTP_OK != responseCode.get()) {
+		if (responseCode.get() != HttpURLConnection.HTTP_OK) {
 			throw new ConnectionException(String.format(
 					"Bad HTTP status! [%d], Error message: [%s]. Probably wrong URL adress was used. Check the URL.",
 					responseCode.get(), responseMessage.get()));
