@@ -37,7 +37,7 @@ public class CurrencyController {
 	}
 
 	public Example getExchangeRatesTable(ExchangeRatesTableTypes tableType) {
-		Example[] mapped = currencyService.getExchangeRatesTable(new HTTPDownloader(), new HTTPtoExampleParser(),
+		Example[] mapped = currencyService.getCurrentExchangeRate(new HTTPDownloader(), new HTTPtoExampleParser(),
 				new ExchangeRatesTableURLEnchancer(tableType));
 		return Objects.nonNull(mapped) ? mapped[0] : null;
 	}

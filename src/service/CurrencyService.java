@@ -40,10 +40,6 @@ public class CurrencyService {
 		return parser.parse(downloader.download((IConnection<S>) connection));
 	}
 
-	public <S, D> D getExchangeRatesTable(IDownloader<S> downloader, IParser<S, D> parser, IHTTPConnectionURL url) {
-		return getCurrentExchangeRate(downloader, parser, url);
-	}
-
 	public <S, D> D getExchangeRateFromFile(IDownloader<S> downloader, IParser<S, D> parser, String path) {
 		FileConnection connection = new FileConnection(path);
 		connection.validateConnection();
