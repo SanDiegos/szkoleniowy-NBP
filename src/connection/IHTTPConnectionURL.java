@@ -2,7 +2,7 @@ package connection;
 
 import java.net.URL;
 
-public interface HTTPConnectionURL {
+public interface IHTTPConnectionURL {
 
 	URL getUrl();
 }

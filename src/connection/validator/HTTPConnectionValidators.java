@@ -7,7 +7,7 @@ import java.util.Optional;
 import exception.ConnectionException;
 import util.FunctionWithThrows;
 
-public class HTTPConnectionValidators<T> {
+public class HTTPConnectionValidators {
 
 	public static boolean validateConnectionWithoutThrow(HttpURLConnection connection) {
 		Optional<Integer> responseCode = checkResponse(connection, HttpURLConnection::getResponseCode);

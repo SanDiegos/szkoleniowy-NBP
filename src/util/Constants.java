@@ -21,22 +21,37 @@ public class Constants {
 		}
 	}
 
-	public enum ActualExchangeRateTableTypes {
+	public enum ActualExchangeRateTableTypes implements IEnumType<String> {
 		A, C;
+
+		@Override
+		public String getValue() {
+			return this.toString();
+		}
 	}
 
-	public enum ExchangeRatesTableTypes {
+	public enum ExchangeRatesTableTypes implements IEnumType<String> {
 		A, B, C;
+
+		@Override
+		public String getValue() {
+			return this.toString();
+		}
 	}
 
 	@Getter
-	public enum CurrencyCode {
+	public enum CurrencyCode implements IEnumType<String> {
 		SWEDISH_KORONA("SEK"), SWISS_FRANC("CHF"), EURO("EUR"), US_DOLLAR("USD");
 
 		private String currencyCode;
 
 		CurrencyCode(String currencyCode) {
 			this.currencyCode = currencyCode;
+		}
+
+		@Override
+		public String getValue() {
+			return currencyCode;
 		}
 	}
 
