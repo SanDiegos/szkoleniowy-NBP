@@ -7,6 +7,8 @@ import java.util.Objects;
 import calculations.Calculations;
 import connection.ExchangeRateURLEnhancer;
 import connection.ExchangeRatesTableURLEnchancer;
+import connection.HTTPConnection;
+import connection.validator.HTTPConnectionValidators;
 import downloader.FileDownloader;
 import downloader.HTTPDownloader;
 import entity.currency.Currency;
@@ -15,6 +17,7 @@ import parser.FileToCurrencyParser;
 import parser.HTTPtoCurrencyParser;
 import parser.HTTPtoExampleParser;
 import service.CurrencyService;
+import util.Constants;
 import util.Constants.ActualExchangeRateTableTypes;
 import util.Constants.CurrencyCode;
 import util.Constants.ExchangeRatesTableTypes;
@@ -23,12 +26,30 @@ public class CurrencyController {
 
 	private final CurrencyService currencyService = new CurrencyService();
 
+//	public Currency getExchangeRateForDate(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode,
+//			/* @Valid @PastOrPresent */ LocalDate date) {
+//		ControllerArgumentsValidator.checkIfDateIsPastOrPresent(date);
+//
+//		return currencyService.getExchangeRateForDateReparetly(new HTTPDownloader(), new HTTPtoCurrencyParser(),
+//				new ExchangeRateURLEnhancer(tableType, currencyCode, date), tableType, currencyCode, date);
+//	}
+
 	public Currency getExchangeRateForDate(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode,
 			/* @Valid @PastOrPresent */ LocalDate date) {
-		ControllerArgumentsValidator.checkIfDateIsPastOrPresent(date);
+//		ControllerArgumentsValidator.checkIfDateIsPastOrPresent(date);
 
-		return currencyService.getExchangeRateForDateReparetly(new HTTPDownloader(), new HTTPtoCurrencyParser(),
-				new ExchangeRateURLEnhancer(tableType, currencyCode, date), tableType, currencyCode, date);
+		HTTPConnection connection =  new HTTPConnection(new ExchangeRateURLEnhancer(tableType, currencyCode, date), t -> HTTPConnectionValidators.validateConnectionWithoutThrow(t));
+		
+		int loop = Constants.NUMBER_OF_REPEATINGS_IN_SEARCH_FOR_DAY;
+		while (!connection.validateConnection() && loop > 0) {
+			date = date.minusDays(1);
+			--loop;
+			connection = new HTTPConnection(new ExchangeRateURLEnhancer(tableType, currencyCode, date),
+					t -> HTTPConnectionValidators.validateConnectionWithoutThrow(t));
+		}
+		
+		return currencyService.makeRequest(new HTTPDownloader(), new HTTPtoCurrencyParser(),
+				connection);
 	}
 
 	public Currency getCurrentExchangeRate(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode) {
@@ -43,7 +64,7 @@ public class CurrencyController {
 	}
 
 	public Currency getExchangeRateFromFile(String path) {
-		return currencyService.getExchangeRateFromFile(new FileDownloader(), new FileToCurrencyParser(), path);
+		return currencyService.getExchangeRateFromFile(new FileDownloader(), new FileToCurrencyParser(), () -> path);
 	}
 
 	public BigDecimal exchange(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode, BigDecimal amount) {

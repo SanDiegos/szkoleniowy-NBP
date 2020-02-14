@@ -43,7 +43,7 @@ public class Main {
 		BigDecimal exchange = facade.exchange("A", "EUR", BigDecimal.valueOf(2));
 		System.out.println("exchange: " + exchange);
 
-		Currency currencyRateForDate = facade.getExchangeRateForDate("A", "EUR", LocalDate.of(2020, 02, 13));
+		Currency currencyRateForDate = facade.getExchangeRateForDate("A", "EUR", LocalDate.of(2020, 02, 17));
 		System.out.println("currencyRateForDate: " + currencyRateForDate);
 
 	}

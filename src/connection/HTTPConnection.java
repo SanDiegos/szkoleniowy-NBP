@@ -4,16 +4,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Optional;
 import java.util.function.Function;
+
+import exception.ConnectionException;
 
 public class HTTPConnection implements IConnection<String> {
 
 	private final HttpURLConnection connection;
 	private final Function<HttpURLConnection, Boolean> httpConnectionValidator;
 
-	public HTTPConnection(IHTTPConnectionURL url, Function<HttpURLConnection, Boolean> validation) {
-		this.connection = httpURLConnectionCreator(url);
+	public HTTPConnection(IPath<URL> url, Function<HttpURLConnection, Boolean> validation) {
+		this.connection = httpURLConnectionCreator(url.getPath());
 		this.httpConnectionValidator = validation;
 	}
 
@@ -23,9 +26,8 @@ public class HTTPConnection implements IConnection<String> {
 		try (BufferedReader responseReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
 			response = responseReader.lines().findAny();
 		} catch (IOException e) {
-			System.err.println(String.format("Error while reading response form connection on URL: [%s].",
-					connection.getURL().getPath()));
-			return null;
+			throw new ConnectionException(String.format("Error while reading response form connection on URL: [%s].",
+					connection.getURL().getPath()), e);
 		} finally {
 			connection.disconnect();
 		}
@@ -37,25 +39,12 @@ public class HTTPConnection implements IConnection<String> {
 		return httpConnectionValidator.apply(connection);
 	}
 
-//	@Override
-//	public InputStream downloadData() {
-//		try (InputStream inputStream = connection.getInputStream()) {
-//			return inputStream;
-//		} catch (IOException e) {
-//			throw new RuntimeException(String.format("Error while reading response form connection on URL: [%s].",
-//					connection.getURL().getPath()));
-//		} finally {
-//			connection.disconnect();
-//		}
-//
-//	}
-
-	private HttpURLConnection httpURLConnectionCreator(IHTTPConnectionURL u) {
+	private HttpURLConnection httpURLConnectionCreator(URL u) {
 		HttpURLConnection connection = null;
 		try {
-			connection = (HttpURLConnection) u.getUrl().openConnection();
+			connection = (HttpURLConnection) u.openConnection();
 		} catch (IOException e) {
-			System.err.println("Error while trying to open connection via HTTP.");
+			throw new ConnectionException("Error while trying to open connection via HTTP.", e);
 		}
 		return connection;
 	}

@@ -12,13 +12,13 @@ import util.Constants.NBPBaseURL;
 @Getter
 public class ExchangeRateURLEnhancer implements IHTTPConnectionURL {
 
-	private URL url;
+	private URL path;
 
 	public ExchangeRateURLEnhancer(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode) {
 		String urlAsString = String.format(NBPBaseURL.EXCHANGE_RATE.getUrl(), tableType.toString(),
 				currencyCode.getCurrencyCode());
 		try {
-			this.url = new URL(urlAsString);
+			this.path = new URL(urlAsString);
 		} catch (MalformedURLException e) {
 			System.err.println(String.format("Error while creating URL from String: [%s]", urlAsString));
 		}
@@ -28,7 +28,7 @@ public class ExchangeRateURLEnhancer implements IHTTPConnectionURL {
 		String urlAsString = String.format(NBPBaseURL.EXCHANGE_RATE_DATE.getUrl(), tableType.toString(),
 				currencyCode.getCurrencyCode(), date.toString());
 		try {
-			this.url = new URL(urlAsString);
+			this.path = new URL(urlAsString);
 		} catch (MalformedURLException e) {
 			System.err.println(String.format("Error while creating URL from String: [%s]", urlAsString));
 		}

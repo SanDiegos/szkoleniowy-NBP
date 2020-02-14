@@ -8,8 +8,8 @@ public class FileConnection implements IConnection<File> {
 
 	private final File file;
 
-	public FileConnection(String path) {
-		this.file = new File(path);
+	public FileConnection(IPath<String> path) {
+		this.file = new File(path.getPath());
 	}
 
 	@Override
