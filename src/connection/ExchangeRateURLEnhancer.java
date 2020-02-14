@@ -10,7 +10,7 @@ import util.Constants.CurrencyCode;
 import util.Constants.NBPBaseURL;
 
 @Getter
-public class ExchangeRateURLEnhancer implements HTTPConnectionURL {
+public class ExchangeRateURLEnhancer implements IHTTPConnectionURL {
 
 	private URL url;
 

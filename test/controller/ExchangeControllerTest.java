@@ -52,11 +52,12 @@ public class ExchangeControllerTest {
 
 	@Test
 	public void getExchangeRates() {
-		Example exchangeRates = controller.getExchangeRates(ExchangeRatesTableTypes.A);
+		Example exchangeRates = controller.getExchangeRatesTable(ExchangeRatesTableTypes.A);
 		Assert.assertNotNull(exchangeRates);
 		Assert.assertNotNull(exchangeRates.getRates());
 		Assert.assertNotEquals(exchangeRates.getRates(), Collections.EMPTY_LIST);
-		List<String> collect = Stream.of(ExchangeRatesTableTypes.values()).map(d -> d.toString()).collect(Collectors.toList());
+		List<String> collect = Stream.of(ExchangeRatesTableTypes.values()).map(d -> d.toString())
+				.collect(Collectors.toList());
 		Assert.assertTrue(collect.contains(exchangeRates.getTable()));
 	}
 

@@ -8,7 +8,7 @@ import util.Constants.ExchangeRatesTableTypes;
 import util.Constants.NBPBaseURL;
 
 @Getter
-public class ExchangeRatesTableURLEnchancer implements HTTPConnectionURL {
+public class ExchangeRatesTableURLEnchancer implements IHTTPConnectionURL {
 
 	private URL url;
 

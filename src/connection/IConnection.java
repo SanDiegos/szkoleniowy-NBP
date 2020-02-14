@@ -1,7 +1,8 @@
 package connection;
 
-public interface IConnection {
+public interface IConnection<C> {
 
 	boolean validateConnection();
 
+	C downloadData();
 }

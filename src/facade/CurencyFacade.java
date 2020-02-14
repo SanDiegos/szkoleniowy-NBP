@@ -36,7 +36,7 @@ public class CurencyFacade {
 
 		ExchangeRatesTableTypes tabType = EnumUtil.getEnumByValue("tableType", tableType,
 				ExchangeRatesTableTypes.class);
-		return nbpController.getExchangeRates(tabType);
+		return nbpController.getExchangeRatesTable(tabType);
 	}
 
 	public Currency getExchangeRateFromFile(String patch) {
