@@ -2,7 +2,7 @@ package downloader;
 
 import connection.IConnection;
 
-public interface IDownloader<S> {
+public interface IDownloader<D> {
 
-	S download(IConnection<S> connection);
+	D download(IConnection<D> connection);
 }

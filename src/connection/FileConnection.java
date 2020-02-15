@@ -8,14 +8,14 @@ public class FileConnection implements IConnection<File> {
 
 	private final File file;
 
-	public FileConnection(String path) {
-		this.file = new File(path);
+	public FileConnection(IPath<String> path) {
+		this.file = new File(path.getPath());
 	}
 
 	@Override
 	public boolean validateConnection() {
 		if (!file.exists()) {
-			throw new ConnectionException(String.format("File does not exsists on directory: [%s]", file.getPath()));
+			throw new ConnectionException(String.format("File doesn't exsists on directory: [%s]", file.getPath()));
 		}
 		return true;
 	}

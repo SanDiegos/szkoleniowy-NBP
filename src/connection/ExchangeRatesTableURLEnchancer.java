@@ -10,12 +10,12 @@ import util.Constants.NBPBaseURL;
 @Getter
 public class ExchangeRatesTableURLEnchancer implements IHTTPConnectionURL {
 
-	private URL url;
+	private URL path;
 
 	public ExchangeRatesTableURLEnchancer(ExchangeRatesTableTypes tableType) {
 		String urlAsString = String.format(NBPBaseURL.EXCHANGE_RATES_TABLE.getUrl(), tableType.toString());
 		try {
-			this.url = new URL(urlAsString);
+			this.path = new URL(urlAsString);
 		} catch (MalformedURLException e) {
 			System.err.println(String.format("Error while creating URL from String: [%s]", urlAsString));
 		}
