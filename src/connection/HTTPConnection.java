@@ -49,13 +49,4 @@ public class HTTPConnection implements IConnection<String> {
 		return connection;
 	}
 
-//	@Override
-//	public InputStream downloadData() {
-//		try (InputStream data = connection.getInputStream()) {
-//			return data;
-//		} catch (IOException e) {
-//			throw new ConnectionException("Error while trying to open connection via HTTP.", e);
-//		}
-//	}
-
 }

@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
-import entity.IEntity;
+import entity.IEntityHead;
 import lombok.Data;
 
 @Data
-public class Currency implements IEntity {
+public class Currency implements IEntityHead {
 
 	private String table;
 	private String currency;

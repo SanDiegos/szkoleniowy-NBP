@@ -1,7 +1,6 @@
 package service;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 import connection.ExchangeRateURLEnhancer;
 import connection.ExchangeRatesTableURLEnchancer;
@@ -56,8 +55,7 @@ public class CurrencyService {
 		HTTPConnection connection = new HTTPConnection(new ExchangeRatesTableURLEnchancer(tableType),
 				t -> HTTPConnectionValidators.validateConnection(t));
 		connection.validateConnection();
-		Example[] mapped = currencyRepository.makeRequest(new HTTPDownloader(), new HTTPtoExampleParser(), connection);
-		return Objects.nonNull(mapped) ? mapped[0] : null;
+		return currencyRepository.makeRequest(new HTTPDownloader(), new HTTPtoExampleParser(), connection);
 	}
 
 	public Currency getExchangeRateFromFile(IPath<String> path) {

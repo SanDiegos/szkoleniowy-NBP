@@ -15,7 +15,7 @@ public class FileConnection implements IConnection<File> {
 	@Override
 	public boolean validateConnection() {
 		if (!file.exists()) {
-			throw new ConnectionException(String.format("File does not exsists on directory: [%s]", file.getPath()));
+			throw new ConnectionException(String.format("File doesn't exsists on directory: [%s]", file.getPath()));
 		}
 		return true;
 	}

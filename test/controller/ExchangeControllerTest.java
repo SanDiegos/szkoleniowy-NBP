@@ -19,10 +19,10 @@ import org.junit.jupiter.api.Test;
 import calculations.Calculations;
 import entity.currency.Currency;
 import entity.tableType.Example;
+import parser.StringtoCurrencyParser;
 import util.Constants.ActualExchangeRateTableTypes;
 import util.Constants.CurrencyCode;
 import util.Constants.ExchangeRatesTableTypes;
-import util.JsonUtil;
 
 public class ExchangeControllerTest {
 
@@ -30,7 +30,8 @@ public class ExchangeControllerTest {
 	private final LocalDate dateOfcurrency = LocalDate.of(2020, 02, 9);
 
 	private final String jsonExample = "{\"table\":\"C\",\"currency\":\"OJRO_Z_PLIKU\",\"code\":\"EUR\",\"rates\":[{\"no\":\"029/C/NBP/2020\",\"effectiveDate\":\"2020-02-12\",\"bid\":4.2081,\"ask\":4.2931}]}";
-	private final String filePath = "C:\\Users\\daniel.jedra\\Documents\\JSON_created.txt";
+//	private final String filePath = "E:\\Users\\daniel.jedra\\Documents\\JSON_created.txt";
+	private final String filePath = "E:JSON_created.txt";
 	
 	private final BigDecimal amountForExchange = BigDecimal.valueOf(15);
 
@@ -65,7 +66,7 @@ public class ExchangeControllerTest {
 	public void getExchangeRateFromFile() {
 		createFile();
 		Currency exchangeRateFromFile = controller.getExchangeRateFromFile(filePath);
-		Currency converted = JsonUtil.convertToPojo(jsonExample, Currency.class);
+		Currency converted = new StringtoCurrencyParser().parse(jsonExample);
 		Assert.assertEquals(exchangeRateFromFile, converted);
 	}
 
