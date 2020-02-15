@@ -8,8 +8,6 @@ import connection.FileConnection;
 import connection.HTTPConnection;
 import connection.IPath;
 import connection.validator.HTTPConnectionValidators;
-import downloader.FileDownloader;
-import downloader.HTTPDownloader;
 import entity.currency.Currency;
 import entity.tableType.Example;
 import parser.FileToCurrencyParser;
@@ -39,7 +37,7 @@ public class CurrencyService {
 					t -> HTTPConnectionValidators.validateConnectionWithoutThrow(t));
 		}
 
-		return currencyRepository.makeRequest(new HTTPDownloader(), new StringtoCurrencyParser(), connection);
+		return currencyRepository.makeRequest(new StringtoCurrencyParser(), connection);
 	}
 
 	public Currency getCurrentExchangeRate(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode) {
@@ -47,7 +45,7 @@ public class CurrencyService {
 		HTTPConnection connection = new HTTPConnection(new ExchangeRateURLEnhancer(tableType, currencyCode, null),
 				t -> HTTPConnectionValidators.validateConnection(t));
 		connection.validateConnection();
-		return currencyRepository.makeRequest(new HTTPDownloader(), new StringtoCurrencyParser(), connection);
+		return currencyRepository.makeRequest(new StringtoCurrencyParser(), connection);
 	}
 
 	public Example getCurrentExchangeRates(ExchangeRatesTableTypes tableType) {
@@ -55,14 +53,13 @@ public class CurrencyService {
 		HTTPConnection connection = new HTTPConnection(new ExchangeRatesTableURLEnchancer(tableType),
 				t -> HTTPConnectionValidators.validateConnection(t));
 		connection.validateConnection();
-		return currencyRepository.makeRequest(new HTTPDownloader(), new HTTPtoExampleParser(), connection);
+		return currencyRepository.makeRequest(new HTTPtoExampleParser(), connection);
 	}
 
 	public Currency getExchangeRateFromFile(IPath<String> path) {
 		FileConnection connection = new FileConnection(path);
 		connection.validateConnection();
-		return currencyRepository.makeRequest(new FileDownloader(), new FileToCurrencyParser(),
-				new FileConnection(path));
+		return currencyRepository.makeRequest(new FileToCurrencyParser(), new FileConnection(path));
 	}
 
 //	public <S, D, P> D getCurrentExchangeRate(IDownloader<S> downloader, IParser<S, D> parser, IPath<P> path) {
