@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.currency.Currency;
 import exception.ParserException;
 
-public class HTTPtoCurrencyParser implements IParser<String, Currency> {
+public class StringtoCurrencyParser implements IParser<String, Currency> {
 
 	@Override
 	public Currency parse(String data) {
