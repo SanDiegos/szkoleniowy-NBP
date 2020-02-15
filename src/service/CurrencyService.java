@@ -44,7 +44,7 @@ public class CurrencyService {
 
 	public Currency getCurrentExchangeRate(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode) {
 
-		HTTPConnection connection = new HTTPConnection(new ExchangeRateURLEnhancer(tableType, currencyCode),
+		HTTPConnection connection = new HTTPConnection(new ExchangeRateURLEnhancer(tableType, currencyCode, null),
 				t -> HTTPConnectionValidators.validateConnection(t));
 		connection.validateConnection();
 		return currencyRepository.makeRequest(new HTTPDownloader(), new StringtoCurrencyParser(), connection);

@@ -14,7 +14,7 @@ public class Main {
 		Currency actualExchangeRate = facade.getCurrentExchangeRate("A", "EUR");
 		System.out.println("actualExchangeRate: " + actualExchangeRate);
 
-		Example exchangeRates = facade.getExchangeRates("C");
+		Example exchangeRates = facade.getExchangeRates("B");
 		System.out.println("exchangeRates: " + exchangeRates);
 
 		Currency fromFile = facade.getExchangeRateFromFile(Constants.FILE_PATH);

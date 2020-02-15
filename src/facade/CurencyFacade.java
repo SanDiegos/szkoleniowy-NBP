@@ -52,5 +52,4 @@ public class CurencyFacade {
 		return nbpController.exchange(tabType, currCode, amount);
 	}
 
-
 }
