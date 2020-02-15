@@ -22,7 +22,7 @@ public class Constants {
 		}
 	}
 
-	public enum ActualExchangeRateTableTypes implements IEnumType<String> {
+	public enum ActualExchangeRateTableTypes implements IEnumType<String>, ITableType {
 		A, C;
 
 		@Override
@@ -31,7 +31,7 @@ public class Constants {
 		}
 	}
 
-	public enum ExchangeRatesTableTypes implements IEnumType<String> {
+	public enum ExchangeRatesTableTypes implements IEnumType<String>, ITableType {
 		A, B, C;
 
 		@Override
