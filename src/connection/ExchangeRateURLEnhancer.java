@@ -15,10 +15,10 @@ public class ExchangeRateURLEnhancer implements IHTTPConnectionURL {
 
 	private URL path;
 
-	public ExchangeRateURLEnhancer(ITableType tableType, CurrencyCode currencyCode, LocalDate date) {
+	public ExchangeRateURLEnhancer(NBPBaseURL baseURL, ITableType tableType, CurrencyCode currencyCode,
+			LocalDate date) {
 		String urlAsString = createUrlAsString(
-				Objects.isNull(date) ? NBPBaseURL.EXCHANGE_RATE : NBPBaseURL.EXCHANGE_RATE_DATE, tableType,
-				currencyCode, date);
+				baseURL, tableType, currencyCode, date);
 		try {
 			this.path = new URL(urlAsString);
 		} catch (MalformedURLException e) {
@@ -28,7 +28,8 @@ public class ExchangeRateURLEnhancer implements IHTTPConnectionURL {
 	
 	private String createUrlAsString(NBPBaseURL baseUrl, ITableType tableType, CurrencyCode currencyCode,
 			LocalDate date) {
-		return String.format(baseUrl.getUrl(), tableType.toString(), currencyCode.getCurrencyCode(),
+		return String.format(baseUrl.getUrl(), tableType.toString(),
+				Objects.isNull(currencyCode) ? "" : currencyCode.getCurrencyCode(),
 				Objects.isNull(date) ? "" : date.toString());
 	}
 
