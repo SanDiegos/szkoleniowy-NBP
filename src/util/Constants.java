@@ -4,8 +4,8 @@ import lombok.Getter;
 
 public class Constants {
 
-//	public final static String FILE_PATH = "C:\\Users\\daniel.jedra\\Documents\\JSON.txt";
-	public final static String FILE_PATH = "E:JSON.txt";
+	public final static String FILE_PATH = "C:\\Users\\daniel.jedra\\Documents\\JSON.txt";
+//	public final static String FILE_PATH = "E:JSON.txt";
 	public final static int NUMBER_OF_REPEATINGS_IN_SEARCH_FOR_DAY = 15;
 
 	@Getter

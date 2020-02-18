@@ -1,8 +1,8 @@
-package controller;
+package service;
 
 import java.time.LocalDate;
 
-public class ControllerArgumentsValidator {
+public class ServiceArgumentsValidator {
 
 	public static void checkIfDateIsPastOrPresent(LocalDate date) {
 		if (date.isAfter(LocalDate.now())) {
