@@ -1,31 +1,28 @@
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import connection.FileDataProvider;
+import connection.NBPDataProvider;
 import entity.currency.Currency;
-import entity.tableType.Example;
-import facade.CurencyFacade;
-import util.Constants;
+import parser.StringtoCurrencyParser;
+import service.CurrencyService;
 
 public class Main {
 
 	public static void main(String[] args) {
-		CurencyFacade facade = new CurencyFacade();
 
-		Currency actualExchangeRate = facade.getCurrentExchangeRate("A", "EUR");
-		System.out.println("actualExchangeRate: " + actualExchangeRate);
+		CurrencyService ser1 = new CurrencyService(new StringtoCurrencyParser(), new NBPDataProvider());
+		Currency exchangeRateForDate = ser1.getParsedData("A", "EUR", LocalDate.of(2020, 02, 18));
+		System.out.println("exchangeRateForDate: " + exchangeRateForDate);
 
-		Example exchangeRates = facade.getExchangeRates("B");
-		System.out.println("exchangeRates: " + exchangeRates);
+		CurrencyService ser2 = new CurrencyService(new StringtoCurrencyParser(), new FileDataProvider());
+		Currency exchangeRateFromFile = ser2.getParsedData("A", "EUR", LocalDate.of(2020, 02, 16));
+		System.out.println("exchangeRateForDate: " + exchangeRateFromFile);
 
-		Currency fromFile = facade.getExchangeRateFromFile(Constants.FILE_PATH);
-		System.out.println("fromFile: " + fromFile);
-
-		BigDecimal exchange = facade.exchange("A", "EUR", BigDecimal.valueOf(2));
+		CurrencyService ser3 = new CurrencyService(new StringtoCurrencyParser(),
+				new NBPDataProvider());
+		BigDecimal exchange = ser3.exchange("A", "EUR", BigDecimal.valueOf(4));
 		System.out.println("exchange: " + exchange);
-
-		Currency currencyRateForDate = facade.getExchangeRateForDate("A", "EUR", LocalDate.of(2020, 02, 14));
-		System.out.println("currencyRateForDate: " + currencyRateForDate);
-
 	}
 
 }

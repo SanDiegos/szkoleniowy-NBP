@@ -15,10 +15,19 @@ public class ExchangeRateURLEnhancer implements IHTTPConnectionURL {
 
 	private URL path;
 
-	public ExchangeRateURLEnhancer(NBPBaseURL baseURL, ITableType tableType, CurrencyCode currencyCode,
+	public ExchangeRateURLEnhancer(ITableType tableType, CurrencyCode currencyCode,
 			LocalDate date) {
 		String urlAsString = createUrlAsString(
-				baseURL, tableType, currencyCode, date);
+				NBPBaseURL.EXCHANGE_RATE_DATE, tableType, currencyCode, date);
+		try {
+			this.path = new URL(urlAsString);
+		} catch (MalformedURLException e) {
+			System.err.println(String.format("Error while creating URL from String: [%s]", urlAsString));
+		}
+	}
+
+	public ExchangeRateURLEnhancer(ITableType tableType, CurrencyCode currencyCode) {
+		String urlAsString = createUrlAsString(NBPBaseURL.EXCHANGE_RATE, tableType, currencyCode, null);
 		try {
 			this.path = new URL(urlAsString);
 		} catch (MalformedURLException e) {

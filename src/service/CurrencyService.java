@@ -1,76 +1,57 @@
 package service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
-import connection.ExchangeRateURLEnhancer;
-import connection.FileConnection;
-import connection.HTTPConnection;
-import connection.IPath;
-import connection.validator.HTTPConnectionValidators;
+import calculations.Calculations;
+import connection.IDataProvider;
+//import demo.CurrencyService;
 import entity.currency.Currency;
-import entity.tableType.Example;
-import parser.FileToCurrencyParser;
-import parser.HTTPtoExampleParser;
-import parser.StringtoCurrencyParser;
-import repository.CurrencyRepository;
+import parser.IParser;
 import util.Constants;
 import util.Constants.ActualExchangeRateTableTypes;
 import util.Constants.CurrencyCode;
-import util.Constants.ExchangeRatesTableTypes;
-import util.Constants.NBPBaseURL;
+import util.EnumUtil;
 
-public class CurrencyService {
+public class CurrencyService implements IService<Currency> {
 
-	private final CurrencyRepository currencyRepository = new CurrencyRepository();
+	private IParser<String, Currency> parser;
+	private IDataProvider<String> dataProvider;
 
-	public Currency getExchangeRateForDate(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode,
-			LocalDate date) {
+	public CurrencyService(IParser<String, Currency> parser, IDataProvider<String> dataProvider) {
+		this.parser = parser;
+		this.dataProvider = dataProvider;
+	}
 
-		HTTPConnection connection = new HTTPConnection(
-				new ExchangeRateURLEnhancer(NBPBaseURL.EXCHANGE_RATE_DATE, tableType, currencyCode, date),
-				t -> HTTPConnectionValidators.validateConnectionWithoutThrow(t));
+	public Currency getParsedData(String tableType, String currencyCode, LocalDate date) {
+		ServiceArgumentsValidator.checkIfDateIsPastOrPresent(date);
+		ActualExchangeRateTableTypes tabType = EnumUtil.getEnumByValue("tableType", tableType,
+				ActualExchangeRateTableTypes.class);
+		CurrencyCode currCode = EnumUtil.getEnumByValue("currencyCode", currencyCode, CurrencyCode.class);
 
 		int loop = Constants.NUMBER_OF_REPEATINGS_IN_SEARCH_FOR_DAY;
-		while (!connection.validateConnection() && loop > 0) {
+		while (!dataProvider.hasData(tabType, currCode, date) && loop > 0) {
 			date = date.minusDays(1);
 			--loop;
-			connection = new HTTPConnection(
-					new ExchangeRateURLEnhancer(NBPBaseURL.EXCHANGE_RATE_DATE, tableType, currencyCode, date),
-					t -> HTTPConnectionValidators.validateConnectionWithoutThrow(t));
 		}
 
-		return currencyRepository.makeRequest(new StringtoCurrencyParser(), connection);
+		String downloadData = dataProvider.downloadData(tabType, currCode, date);
+		return parser.parse(downloadData);
 	}
 
-	public Currency getCurrentExchangeRate(ActualExchangeRateTableTypes tableType, CurrencyCode currencyCode) {
 
-		HTTPConnection connection = new HTTPConnection(
-				new ExchangeRateURLEnhancer(NBPBaseURL.EXCHANGE_RATE, tableType, currencyCode, null),
-				t -> HTTPConnectionValidators.validateConnection(t));
-		connection.validateConnection();
-		return currencyRepository.makeRequest(new StringtoCurrencyParser(), connection);
+	public BigDecimal exchange(String tableType, String currencyCode, BigDecimal amount) {
+
+		ActualExchangeRateTableTypes tabType = EnumUtil.getEnumByValue("tableType", tableType,
+				ActualExchangeRateTableTypes.class);
+		CurrencyCode currCode = EnumUtil.getEnumByValue("currencyCode", currencyCode, CurrencyCode.class);
+
+		String downloadData = dataProvider.downloadData(tabType, currCode, null);
+		if (Objects.isNull(downloadData) || (downloadData.length() == 0)) {
+			throw new RuntimeException("Didn't found current course currency.");
+		}
+		return Calculations.exchange(amount, parser.parse(downloadData).getRate());
 	}
-
-	public Example getCurrentExchangeRates(ExchangeRatesTableTypes tableType) {
-
-		HTTPConnection connection = new HTTPConnection(
-				new ExchangeRateURLEnhancer(NBPBaseURL.EXCHANGE_RATES_TABLE, tableType, null, null),
-				t -> HTTPConnectionValidators.validateConnection(t));
-		connection.validateConnection();
-		return currencyRepository.makeRequest(new HTTPtoExampleParser(), connection);
-	}
-
-	public Currency getExchangeRateFromFile(IPath<String> path) {
-		FileConnection connection = new FileConnection(path);
-		connection.validateConnection();
-		return currencyRepository.makeRequest(new FileToCurrencyParser(), new FileConnection(path));
-	}
-
-//	public <S, D, P> D getCurrentExchangeRate(IDownloader<S> downloader, IParser<S, D> parser, IPath<P> path) {
-//
-//		HTTPConnection connection = new HTTPConnection(path, t -> HTTPConnectionValidators.validateConnection(t));
-//		connection.validateConnection();
-//		return parser.parse(downloader.download((IConnection<S>) connection));
-//	}
 
 }
